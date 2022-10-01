@@ -1,0 +1,60 @@
+.drawer {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 420px;
+  right: 0;
+  height: 100%;
+  background: #fff;
+  box-shadow: -10px 4px 24px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  h2 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .items {
+    flex: 1;
+    overflow: auto;
+    margin-bottom: 20px;
+  }
+
+  .cardTotalBlock {
+    ul {
+      list-style-type: none;
+      li {
+        display: flex;
+      }
+      div {
+        flex: 1;
+        border-bottom: 1px dashed #dfdfdf;
+        margin: 0 10px;
+      }
+    }
+    .greenButton {
+      position: relative;
+      &:hover {
+        svg {
+          transform: translate(10px, -50%);
+        }
+      }
+      svg {
+        position: absolute;
+        right: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: all 0.3s;
+      }
+    }
+  }
+}
+.overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
