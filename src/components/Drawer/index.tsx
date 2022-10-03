@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import styles from "./Drawer.module.scss";
 import { openCart } from "../../app/slices/card";
 import CartItem from "../CartItem";
+import Info from "../Info";
 function Drawer() {
   const dispatch = useAppDispatch();
   const { items } = useAppSelector((state) => state.cart);
@@ -26,13 +27,11 @@ function Drawer() {
             />
           </svg>
         </h2>
-        <div className={styles.items}>
+        {items.length ? <><div className={styles.items}>
           {items.map((item) => (
             <CartItem {...item} key={item.id} />
           ))}
-        </div>
-
-        <div className={styles.cardTotalBlock}>
+        </div> <div className={styles.cardTotalBlock}>
           <ul>
             <li>
               <span>Итого:</span>
@@ -65,7 +64,15 @@ function Drawer() {
               />
             </svg>
           </button>
-        </div>
+        </div></>:   <Info
+            title={ 'Корзина пустая'}
+            description={'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
+            }
+            image={'img/empty-cart.jpg'}
+          />}
+        
+
+        
       </div>
     </div>
   );

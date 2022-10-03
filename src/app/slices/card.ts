@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export interface ICard {
-  id: number;
+export interface CardState {
   title: string;
   price: number;
   imageUrl: string;
 }
+
+export type ICard = CardState & {id: number}
 
 export enum Status {
   LOADING = "loading",

@@ -1,32 +1,30 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICard } from "./card";
 
-interface CartState {
+interface FavoriteState {
   items: ICard[];
 }
 
-const initialState: CartState = {
+const initialState: FavoriteState = {
   items: [],
 };
 
-
-
-const cart = createSlice({
-  name: "cart",
+const favorite = createSlice({
+  name: "favorite",
   initialState,
   reducers: {
-    addToCart(state, action: PayloadAction<ICard>) {
+    addToFavorite(state, action: PayloadAction<ICard>) {
       const res = state.items.find((item) => item.id === action.payload.id);
       if (!res) {
         state.items.push(action.payload);
       }
     },
-    deleteFromCart(state, action: PayloadAction<number>) {
+    deleteFromFavorite(state, action: PayloadAction<number>) {
       state.items = state.items.filter((item) => item.id !== action.payload);
     },
-  }
+  },
 });
 
-export const { addToCart, deleteFromCart } = cart.actions;
+export const {addToFavorite, deleteFromFavorite} = favorite.actions;
 
-export default cart.reducer;
+export default favorite.reducer;
