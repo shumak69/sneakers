@@ -4,7 +4,9 @@ import Drawer from "../components/Drawer";
 import Header from "../components/Header";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { ChangeEvent, useEffect, useState } from "react";
-import { fetchSneakers } from "../app/slices/card";
+import { fetchSneakers, Status } from "../app/slices/card";
+import styles from "../components/Card/Card.module.scss";
+import MyLoader from "../components/Loader";
 function Main() {
   const dispatch = useAppDispatch();
   const { isCartOpen, items, status } = useAppSelector((state) => state.card);
@@ -44,7 +46,6 @@ function Main() {
   }
   return (
     <>
-      {isCartOpen && <Drawer />}
       <div className="content">
         <div className="search">
           <h1>
@@ -79,13 +80,17 @@ function Main() {
           </div>
         </div>
         <div className="cardWrapper">
-          {items
-            .filter((item) =>
-              item.title.toLowerCase().includes(searchValue.toLowerCase())
-            )
-            .map((card) => (
-              <Card key={card.id} {...card} />
-            ))}
+          {status === Status.LOADING
+            ? [...Array(10)].map(() => (
+                <div className={styles.card} style={{ padding: 0 }}>
+                  <MyLoader />
+                </div>
+              ))
+            : items
+                .filter((item) =>
+                  item.title.toLowerCase().includes(searchValue.toLowerCase())
+                )
+                .map((card) => <Card key={card.id} {...card} />)}
         </div>
       </div>
     </>

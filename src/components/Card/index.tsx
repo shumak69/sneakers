@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { ICard } from "../../app/slices/card";
 import { addToCart, deleteFromCart } from "../../app/slices/cart";
@@ -6,10 +6,14 @@ import { addToFavorite, deleteFromFavorite } from "../../app/slices/favorite";
 import styles from "./Card.module.scss";
 
 function Card({ imageUrl, price, title, id }: ICard) {
-  const [isAdded, setIsAdded] = useState(false);
+  const { items: favoriteItems } = useAppSelector((state) => state.favorite);
+  const { items: cartItem } = useAppSelector((state) => state.cart);
+  const [isAdded, setIsAdded] = useState(
+    !!cartItem.find((item) => item.id === id)
+  );
   const [isFavorite, setFavorite] = useState(false);
   const dispatch = useAppDispatch();
-  const { items } = useAppSelector((state) => state.favorite);
+  const isMount = useRef(true);
   function onAddCard() {
     setIsAdded((state) => !state);
     if (!isAdded) {
@@ -18,6 +22,15 @@ function Card({ imageUrl, price, title, id }: ICard) {
       dispatch(deleteFromCart(id));
     }
   }
+  useEffect(() => {
+    setIsAdded(!!cartItem.find((item) => item.id === id));
+    if (isMount.current) {
+      isMount.current = false;
+    } else {
+      localStorage.setItem("cart", JSON.stringify(cartItem));
+      localStorage.setItem("favorites", JSON.stringify(favoriteItems));
+    }
+  }, [favoriteItems, cartItem]);
   function onAddFavorite() {
     setFavorite((state) => !state);
     if (!isFavorite) {
@@ -26,13 +39,12 @@ function Card({ imageUrl, price, title, id }: ICard) {
       dispatch(deleteFromFavorite(id));
     }
   }
-  console.log(items.find((item) => item.id === id));
   return (
     <div className={styles.card}>
       <div className={styles.favorite} onClick={onAddFavorite}>
         <img
           src={
-            !items.find((item) => item.id === id)
+            !favoriteItems.find((item) => item.id === id)
               ? "img/unliked.svg"
               : "img/liked.svg"
           }

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getItems } from "../../utils/getItemsFromLS";
 import { ICard } from "./card";
 
 interface FavoriteState {
@@ -6,7 +7,7 @@ interface FavoriteState {
 }
 
 const initialState: FavoriteState = {
-  items: [],
+  items: getItems('favorites'),
 };
 
 const favorite = createSlice({
