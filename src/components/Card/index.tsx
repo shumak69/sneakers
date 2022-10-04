@@ -8,9 +8,7 @@ import styles from "./Card.module.scss";
 function Card({ imageUrl, price, title, id }: ICard) {
   const { items: favoriteItems } = useAppSelector((state) => state.favorite);
   const { items: cartItem } = useAppSelector((state) => state.cart);
-  const [isAdded, setIsAdded] = useState(
-    !!cartItem.find((item) => item.id === id)
-  );
+  const [isAdded, setIsAdded] = useState(false);
   const [isFavorite, setFavorite] = useState(false);
   const dispatch = useAppDispatch();
   const isMount = useRef(true);
@@ -24,6 +22,7 @@ function Card({ imageUrl, price, title, id }: ICard) {
   }
   useEffect(() => {
     setIsAdded(!!cartItem.find((item) => item.id === id));
+    setFavorite(!!favoriteItems.find((item) => item.id === id));
     if (isMount.current) {
       isMount.current = false;
     } else {

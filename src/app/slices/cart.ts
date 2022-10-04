@@ -4,10 +4,12 @@ import { ICard } from "./card";
 
 interface CartState {
   items: ICard[];
+  isOrderComplete: boolean
 }
 
 const initialState: CartState = {
-  items: getItems('cart')
+  items: getItems('cart'),
+  isOrderComplete: false
 };
 
 
@@ -25,9 +27,15 @@ const cart = createSlice({
     deleteFromCart(state, action: PayloadAction<number>) {
       state.items = state.items.filter((item) => item.id !== action.payload);
     },
+    setOrder(state, action: PayloadAction<boolean>) {
+      state.isOrderComplete = action.payload
+    },
+    resetItems(state) {
+      state.items = [];
+    }
   }
 });
 
-export const { addToCart, deleteFromCart } = cart.actions;
+export const { addToCart, deleteFromCart, setOrder, resetItems } = cart.actions;
 
 export default cart.reducer;

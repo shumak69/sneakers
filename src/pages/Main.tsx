@@ -1,10 +1,7 @@
-import React from "react";
-import Card from "../components/Card";
-import Drawer from "../components/Drawer";
-import Header from "../components/Header";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { ChangeEvent, useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { fetchSneakers, Status } from "../app/slices/card";
+import Card from "../components/Card";
 import styles from "../components/Card/Card.module.scss";
 import MyLoader from "../components/Loader";
 function Main() {
@@ -21,6 +18,7 @@ function Main() {
 
   if (isCartOpen) {
     document.body.style.overflow = "hidden";
+    window.scrollTo({ top: 0 });
   } else {
     document.body.style.overflow = "auto";
   }
@@ -81,8 +79,8 @@ function Main() {
         </div>
         <div className="cardWrapper">
           {status === Status.LOADING
-            ? [...Array(10)].map(() => (
-                <div className={styles.card} style={{ padding: 0 }}>
+            ? [...Array(10)].map((_, i) => (
+                <div className={styles.card} style={{ padding: 0 }} key={i}>
                   <MyLoader />
                 </div>
               ))
