@@ -6,7 +6,9 @@ import styles from "../components/Card/Card.module.scss";
 import MyLoader from "../components/Loader";
 function Main() {
   const dispatch = useAppDispatch();
-  const { isCartOpen, items, status } = useAppSelector((state) => state.card);
+  const { isCartOpen, items, status, error } = useAppSelector(
+    (state) => state.card
+  );
   const [searchValue, setSearchValue] = useState("");
   useEffect(() => {
     dispatch(fetchSneakers());
@@ -41,6 +43,16 @@ function Main() {
       div.remove();
       document.body.style.marginRight = scrollWidth + "px";
     }
+  }
+  if (status === Status.ERROR) {
+    return (
+      <div className="error">
+        <h1>Не удалось отобразить товары</h1>
+        <div>
+          Причина: <span>{error}</span>
+        </div>
+      </div>
+    );
   }
   return (
     <>

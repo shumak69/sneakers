@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isRejectedWithValue, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export interface CardState {
@@ -15,21 +15,27 @@ export enum Status {
   ERROR = "error",
 }
 
-export const fetchSneakers = createAsyncThunk<ICard[]>("sneakers/fetchSneakersStatus", async () => {
-  const res = await axios.get("https://6335d63a8aa85b7c5d2408e2.mockapi.io/items");
+export const fetchSneakers = createAsyncThunk<ICard[]>("sneakers/fetchSneakersStatus", async (_ ,{rejectWithValue}) => {
+  try {
+    const res = await axios.get("https://6335d63a8aa85b7c5d2408e2.mockapi.io/items");
   return res.data;
+  } catch (error ) {
+    return rejectWithValue(error.message)
+  }
 });
 
 interface CardSliceState {
   isCartOpen: boolean;
   items: ICard[];
   status: Status;
+  error: string
 }
 
 const initialState: CardSliceState = {
   items: [],
   isCartOpen: false,
   status: Status.LOADING,
+  error: ''
 };
 
 const card = createSlice({
@@ -49,8 +55,9 @@ const card = createSlice({
       state.status = Status.SUCCESS;
       state.items = action.payload;
     });
-    builder.addCase(fetchSneakers.rejected, (state) => {
+    builder.addCase(fetchSneakers.rejected, (state, action) => {
       state.status = Status.ERROR;
+      state.error = String(action.payload)
       state.items = [];
     });
   },

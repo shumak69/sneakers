@@ -19,9 +19,11 @@ const favorite = createSlice({
       if (!res) {
         state.items.push(action.payload);
       }
+      localStorage.setItem("favorites", JSON.stringify(state.items));
     },
     deleteFromFavorite(state, action: PayloadAction<number>) {
       state.items = state.items.filter((item) => item.id !== action.payload);
+      localStorage.setItem("favorites", JSON.stringify(state.items));
     },
   },
 });

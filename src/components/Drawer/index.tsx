@@ -7,18 +7,20 @@ import { resetItems, setOrder } from "../../app/slices/cart";
 import { useState } from "react";
 import axios from "axios";
 function Drawer() {
+  const { isCartOpen } = useAppSelector((state) => state.card);
   const dispatch = useAppDispatch();
   const [orderId, setOrderId] = useState(0);
-  const { items, isOrderComplete } = useAppSelector((state) => state.cart);
+  const { items, isOrderComplete, price } = useAppSelector(
+    (state) => state.cart
+  );
   function closeDrawer() {
-    dispatch(setOrder(false));
     dispatch(openCart(false));
+    dispatch(setOrder(false));
   }
   async function sentOrder() {
-    await axios.post(
-      "https://6335d63a8aa85b7c5d2408e2.mockapi.io/orders",
-      items
-    );
+    await axios.post("https://6335d63a8aa85b7c5d2408e2.mockapi.io/orders", {
+      items,
+    });
     const res = await axios.get(
       "https://6335d63a8aa85b7c5d2408e2.mockapi.io/orders"
     );
@@ -39,7 +41,7 @@ function Drawer() {
             <li>
               <span>Итого:</span>
               <div></div>
-              <b>10 435 грн</b>
+              <b>{price} грн</b>
             </li>
           </ul>
           <button className="greenButton" onClick={sentOrder}>
@@ -72,7 +74,11 @@ function Drawer() {
     );
   }
   return (
-    <div className={styles.overlay}>
+    <div
+      className={[styles.overlay, isCartOpen ? styles.overlayVisible : ""].join(
+        " "
+      )}
+    >
       <div className={styles.drawer}>
         <h2>
           Корзина{" "}

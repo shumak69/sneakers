@@ -5,15 +5,16 @@ import Drawer from "./components/Drawer";
 import Header from "./components/Header";
 import Favorite from "./pages/Favorite";
 import Main from "./pages/Main";
+import Orders from "./pages/Orders";
 function App() {
-  const { isCartOpen } = useAppSelector((state) => state.card);
   return (
     <div className="wrapper">
       <Header />
-      {isCartOpen && <Drawer />}
+      <Drawer />
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/favorite" element={<Favorite />} />
+        <Route path="/orders" element={<Orders />} />
       </Routes>
     </div>
   );

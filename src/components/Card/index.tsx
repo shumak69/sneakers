@@ -1,17 +1,27 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { ICard } from "../../app/slices/card";
 import { addToCart, deleteFromCart } from "../../app/slices/cart";
 import { addToFavorite, deleteFromFavorite } from "../../app/slices/favorite";
 import styles from "./Card.module.scss";
 
-function Card({ imageUrl, price, title, id }: ICard) {
+function Card({
+  imageUrl,
+  price,
+  title,
+  id,
+  disFavorite,
+  disPlus,
+}: ICard & { disPlus?: boolean; disFavorite?: boolean }) {
   const { items: favoriteItems } = useAppSelector((state) => state.favorite);
   const { items: cartItem } = useAppSelector((state) => state.cart);
-  const [isAdded, setIsAdded] = useState(false);
-  const [isFavorite, setFavorite] = useState(false);
+  const [isAdded, setIsAdded] = useState(
+    !!cartItem.find((item) => item.id === id)
+  );
+  const [isFavorite, setFavorite] = useState(
+    !!favoriteItems.find((item) => item.id === id)
+  );
   const dispatch = useAppDispatch();
-  const isMount = useRef(true);
   function onAddCard() {
     setIsAdded((state) => !state);
     if (!isAdded) {
@@ -20,16 +30,6 @@ function Card({ imageUrl, price, title, id }: ICard) {
       dispatch(deleteFromCart(id));
     }
   }
-  useEffect(() => {
-    setIsAdded(!!cartItem.find((item) => item.id === id));
-    setFavorite(!!favoriteItems.find((item) => item.id === id));
-    if (isMount.current) {
-      isMount.current = false;
-    } else {
-      localStorage.setItem("cart", JSON.stringify(cartItem));
-      localStorage.setItem("favorites", JSON.stringify(favoriteItems));
-    }
-  }, [favoriteItems, cartItem]);
   function onAddFavorite() {
     setFavorite((state) => !state);
     if (!isFavorite) {
@@ -38,17 +38,20 @@ function Card({ imageUrl, price, title, id }: ICard) {
       dispatch(deleteFromFavorite(id));
     }
   }
+  useEffect(() => {
+    setIsAdded(!!cartItem.find((item) => item.id === id));
+    setFavorite(!!favoriteItems.find((item) => item.id === id));
+  }, [favoriteItems, cartItem]);
+
   return (
     <div className={styles.card}>
       <div className={styles.favorite} onClick={onAddFavorite}>
-        <img
-          src={
-            !favoriteItems.find((item) => item.id === id)
-              ? "img/unliked.svg"
-              : "img/liked.svg"
-          }
-          alt="unliked"
-        />
+        {!disFavorite && (
+          <img
+            src={!isFavorite ? "img/unliked.svg" : "img/liked.svg"}
+            alt="unliked"
+          />
+        )}
       </div>
       <img src={imageUrl} alt="sneaker" width={133} height={112} />
       <h5>{title}</h5>
@@ -57,12 +60,14 @@ function Card({ imageUrl, price, title, id }: ICard) {
           <span>Цена:</span>
           <b>{price} грн.</b>
         </div>
-        <button onClick={onAddCard}>
-          <img
-            src={!isAdded ? "img/btn-plus.svg" : "img/btn-checked.svg"}
-            alt="Add Card"
-          />
-        </button>
+        {!disPlus && (
+          <button onClick={onAddCard}>
+            <img
+              src={!isAdded ? "img/btn-plus.svg" : "img/btn-checked.svg"}
+              alt="Add Card"
+            />
+          </button>
+        )}
       </div>
     </div>
   );
