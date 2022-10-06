@@ -3,12 +3,20 @@ header {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 40px;
+  .active {
+    img,
+    svg {
+      path {
+        fill: red;
+      }
+    }
+  }
   img,
   svg {
     margin-right: 15px;
     &:hover {
       path {
-        fill: red
+        fill: red;
       }
     }
   }
@@ -37,5 +45,24 @@ header {
   .heart {
     cursor: pointer;
     margin-right: 30px;
+  }
+}
+@media (max-width: 576px) {
+  header {
+    .headerRight {
+      .cart {
+        margin-right: 10px;
+      }
+    }
+    .headerLeft {
+      > div {
+        h3 {
+          font-size: 15px;
+          & + div {
+            font-size: 13px;
+          }
+        }
+      }
+    }
   }
 }

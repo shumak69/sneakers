@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { openCart } from "../../app/slices/card";
 import styles from "./Header.module.scss";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 function Header() {
   const dispatch = useAppDispatch();
   const { price } = useAppSelector((state) => state.cart);
@@ -56,7 +56,10 @@ function Header() {
             </div>
           </div>
 
-          <Link to={"/favorite"}>
+          <NavLink
+            to={"/favorite"}
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
             <svg
               className={styles.heart}
               width="22"
@@ -70,8 +73,11 @@ function Header() {
                 fill="#9B9B9B"
               />
             </svg>
-          </Link>
-          <Link to="/orders">
+          </NavLink>
+          <NavLink
+            to="/orders"
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
             <svg
               width="20"
               height="20"
@@ -86,7 +92,7 @@ function Header() {
                 fill="#9B9B9B"
               />
             </svg>
-          </Link>
+          </NavLink>
         </div>
       </header>
 

@@ -4,11 +4,10 @@ import { fetchSneakers, Status } from "../app/slices/card";
 import Card from "../components/Card";
 import styles from "../components/Card/Card.module.scss";
 import MyLoader from "../components/Loader";
+import { checkScroll } from "../utils/checkScroll";
 function Main() {
   const dispatch = useAppDispatch();
-  const { isCartOpen, items, status, error } = useAppSelector(
-    (state) => state.card
-  );
+  const { items, status, error } = useAppSelector((state) => state.card);
   const [searchValue, setSearchValue] = useState("");
   useEffect(() => {
     dispatch(fetchSneakers());
@@ -18,31 +17,8 @@ function Main() {
     checkScroll();
   }, [searchValue, items]);
 
-  if (isCartOpen) {
-    document.body.style.overflow = "hidden";
-    window.scrollTo({ top: 0 });
-  } else {
-    document.body.style.overflow = "auto";
-  }
-
   function search(e: ChangeEvent<HTMLInputElement>) {
     setSearchValue(e.target.value);
-  }
-  function checkScroll() {
-    if (document.body.offsetHeight > window.innerHeight) {
-      document.body.style.marginRight = "0";
-    } else {
-      let div = document.createElement("div");
-
-      div.style.overflowY = "scroll";
-      div.style.width = "50px";
-      div.style.height = "50px";
-      document.body.append(div);
-      let scrollWidth = div.offsetWidth - div.clientWidth;
-
-      div.remove();
-      document.body.style.marginRight = scrollWidth + "px";
-    }
   }
   if (status === Status.ERROR) {
     return (

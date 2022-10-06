@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, isRejectedWithValue, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice,  PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export interface CardState {

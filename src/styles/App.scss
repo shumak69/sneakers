@@ -153,9 +153,18 @@ label {
   }
 }
 
-.favoritesEmpty {
+.errorDrawer{
+  flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  // font-size: 15px;
+}
+
+.favoritesEmpty, .ordersEmpty {
   .greenButton {
-    width: 245px;
+    width: 300px;
     &:hover {
       svg, img{
         left: 10px
@@ -171,11 +180,18 @@ label {
   align-items: center;
   justify-content: center;
   gap: 20px;
-  .noFavorites {
+  text-align: center;
+  .noFavorites, .noOrders {
     font-weight: 600;
+    font-size: 30px;
+  }
+  div {
+    font-size: 22px;
   }
   svg {
     margin-top: 130px;
   }
 }
+
+@import 'media'
 
