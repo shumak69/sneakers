@@ -41,7 +41,7 @@ function Main() {
           </h1>
           <div className="searchBlock">
             <label htmlFor="search">
-              <img src={"/img/search.svg"} alt="search" />
+              <img src={"img/search.svg"} alt="search" />
             </label>
             <input
               type="text"
